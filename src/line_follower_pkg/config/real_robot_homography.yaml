@@ -1,0 +1,55 @@
+# Real Robot Homography Configuration
+# Bird's-eye view transformation for TurtleBot3 with Raspberry Pi Camera v3
+# Resolution: 1024x576
+
+# Source points (trapezoid in camera view)
+# These define the region of interest in the original camera image
+# Adjust these based on actual camera mounting and field of view
+
+source_points:
+  # Top-left (far, converging lines)
+  - [350, 250]
+
+  # Top-right (far, converging lines)
+  - [674, 250]
+
+  # Bottom-right (close to robot)
+  - [900, 550]
+
+  # Bottom-left (close to robot)
+  - [124, 550]
+
+# Destination points (rectangle in bird's-eye view)
+# These define where the source trapezoid maps to in the output image
+# This creates the "top-down" perspective
+
+destination_points:
+  # Top-left
+  - [200, 0]
+
+  # Top-right
+  - [824, 0]
+
+  # Bottom-right
+  - [824, 576]
+
+  # Bottom-left
+  - [200, 576]
+
+# Output image size (should match camera resolution)
+output_size:
+  width: 1024
+  height: 576
+
+# Notes for calibration:
+# 1. Place robot on track with straight blue lines visible
+# 2. Run: ros2 run line_follower_pkg calibrate_homography
+# 3. Adjust points until lines appear straight and parallel
+# 4. Lines should be vertical in bird's-eye view
+# 5. Robot should see ~2-3 meters ahead
+
+# Calibration tips:
+# - If lines curve inward: move top points closer together
+# - If lines curve outward: move top points farther apart
+# - If perspective is wrong: adjust vertical positions
+# - Use symmetric adjustments for left/right balance

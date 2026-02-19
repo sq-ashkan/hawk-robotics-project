@@ -1,0 +1,518 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="line_follower_world">
+
+    <!-- Physics settings -->
+    <physics type="ode">
+      <real_time_update_rate>1000.0</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+
+    <!-- Light source -->
+    <light name="sun" type="directional">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Ambient light for better visibility -->
+    <light name="ambient" type="point">
+      <pose>0 0 5 0 0 0</pose>
+      <diffuse>0.3 0.3 0.3 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <attenuation>
+        <range>50</range>
+        <constant>0.5</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+    </light>
+
+    <!-- Dark ground plane (asphalt-like) -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>20 20</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>20 20</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.15 0.15 0.15 1</ambient>
+            <diffuse>0.2 0.2 0.2 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ========== WHITE LINE TRACK ========== -->
+    <!-- Track layout: Rectangular loop with rounded corners -->
+    <!-- Road width: 0.5m (distance between two white lines) -->
+    <!-- Line width: 0.05m (5cm) -->
+
+    <!-- ===== STRAIGHT SECTION 1: Bottom (X direction, Y=-1.5) ===== -->
+    <!-- Left line -->
+    <model name="line_bottom_left">
+      <static>true</static>
+      <pose>0 -1.75 0.001 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>6 0.05 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0.5 0.5 0.5 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Right line -->
+    <model name="line_bottom_right">
+      <static>true</static>
+      <pose>0 -1.25 0.001 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>6 0.05 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0.5 0.5 0.5 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== STRAIGHT SECTION 2: Top (X direction, Y=1.5) ===== -->
+    <!-- Left line -->
+    <model name="line_top_left">
+      <static>true</static>
+      <pose>0 1.25 0.001 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>6 0.05 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0.5 0.5 0.5 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Right line -->
+    <model name="line_top_right">
+      <static>true</static>
+      <pose>0 1.75 0.001 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>6 0.05 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0.5 0.5 0.5 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== STRAIGHT SECTION 3: Left side (Y direction, X=-3) ===== -->
+    <!-- Inner line -->
+    <model name="line_left_inner">
+      <static>true</static>
+      <pose>-2.75 0 0.001 0 0 1.5708</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.5 0.05 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0.5 0.5 0.5 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Outer line -->
+    <model name="line_left_outer">
+      <static>true</static>
+      <pose>-3.25 0 0.001 0 0 1.5708</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.5 0.05 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0.5 0.5 0.5 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== STRAIGHT SECTION 4: Right side (Y direction, X=3) ===== -->
+    <!-- Inner line -->
+    <model name="line_right_inner">
+      <static>true</static>
+      <pose>2.75 0 0.001 0 0 1.5708</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.5 0.05 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0.5 0.5 0.5 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Outer line -->
+    <model name="line_right_outer">
+      <static>true</static>
+      <pose>3.25 0 0.001 0 0 1.5708</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>2.5 0.05 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0.5 0.5 0.5 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== CORNER 1: Bottom-Right (90 degree turn) ===== -->
+    <!-- Using arc segments for smooth corner -->
+    <model name="corner_br_outer_1">
+      <static>true</static>
+      <pose>2.823 -1.427 0.001 0 0 0.393</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_br_outer_2">
+      <static>true</static>
+      <pose>3.073 -1.177 0.001 0 0 0.785</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_br_outer_3">
+      <static>true</static>
+      <pose>3.177 -0.823 0.001 0 0 1.178</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="corner_br_inner_1">
+      <static>true</static>
+      <pose>2.573 -1.073 0.001 0 0 0.393</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_br_inner_2">
+      <static>true</static>
+      <pose>2.75 -0.9 0.001 0 0 0.785</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_br_inner_3">
+      <static>true</static>
+      <pose>2.823 -0.573 0.001 0 0 1.178</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== CORNER 2: Bottom-Left (90 degree turn) ===== -->
+    <model name="corner_bl_outer_1">
+      <static>true</static>
+      <pose>-2.823 -1.427 0.001 0 0 -0.393</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_bl_outer_2">
+      <static>true</static>
+      <pose>-3.073 -1.177 0.001 0 0 -0.785</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_bl_outer_3">
+      <static>true</static>
+      <pose>-3.177 -0.823 0.001 0 0 -1.178</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="corner_bl_inner_1">
+      <static>true</static>
+      <pose>-2.573 -1.073 0.001 0 0 -0.393</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_bl_inner_2">
+      <static>true</static>
+      <pose>-2.75 -0.9 0.001 0 0 -0.785</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_bl_inner_3">
+      <static>true</static>
+      <pose>-2.823 -0.573 0.001 0 0 -1.178</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== CORNER 3: Top-Right (90 degree turn) ===== -->
+    <model name="corner_tr_outer_1">
+      <static>true</static>
+      <pose>2.823 1.427 0.001 0 0 -0.393</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_tr_outer_2">
+      <static>true</static>
+      <pose>3.073 1.177 0.001 0 0 -0.785</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_tr_outer_3">
+      <static>true</static>
+      <pose>3.177 0.823 0.001 0 0 -1.178</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="corner_tr_inner_1">
+      <static>true</static>
+      <pose>2.573 1.073 0.001 0 0 -0.393</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_tr_inner_2">
+      <static>true</static>
+      <pose>2.75 0.9 0.001 0 0 -0.785</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_tr_inner_3">
+      <static>true</static>
+      <pose>2.823 0.573 0.001 0 0 -1.178</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== CORNER 4: Top-Left (90 degree turn) ===== -->
+    <model name="corner_tl_outer_1">
+      <static>true</static>
+      <pose>-2.823 1.427 0.001 0 0 0.393</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_tl_outer_2">
+      <static>true</static>
+      <pose>-3.073 1.177 0.001 0 0 0.785</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_tl_outer_3">
+      <static>true</static>
+      <pose>-3.177 0.823 0.001 0 0 1.178</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.5 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="corner_tl_inner_1">
+      <static>true</static>
+      <pose>-2.573 1.073 0.001 0 0 0.393</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_tl_inner_2">
+      <static>true</static>
+      <pose>-2.75 0.9 0.001 0 0 0.785</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="corner_tl_inner_3">
+      <static>true</static>
+      <pose>-2.823 0.573 0.001 0 0 1.178</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.35 0.05 0.002</size></box></geometry>
+          <material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Start/Finish marker -->
+    <model name="start_marker">
+      <static>true</static>
+      <pose>0 -1.5 0.001 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 0.02 0.002</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 0.8 0 1</ambient>
+            <diffuse>1 0.8 0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>

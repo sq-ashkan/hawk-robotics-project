@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="track_ground">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>10 10</size>
+          </plane>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <pbr>
+            <metal>
+              <albedo_map>/home/roammer/Documents/github/uni/hawk-robotics-project/src/line_follower_pkg/worlds/textures/curved_track.png</albedo_map>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
