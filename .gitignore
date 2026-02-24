@@ -44,5 +44,3 @@ htmlcov/
 *.bak
 *.orig
 
-# AI tools
-.claude/
